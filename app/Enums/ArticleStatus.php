@@ -2,6 +2,8 @@
 
 namespace App\Enums;
 
+use Illuminate\Support\Collection;
+
 enum ArticleStatus: string
 {
     case Draft = 'draft';
@@ -9,11 +11,11 @@ enum ArticleStatus: string
     case Published = 'published';
     case Archived = 'archived';
 
-    public static function toSelectArray(): array
+    public static function toSelectArray(): Collection
     {
-        return collect(self::cases())->map(fn($item) => [
+        return collect(self::cases())->map(fn ($item) => [
             'value' => $item->value,
-            'label' => $item->label,
-        ])->values()->toArray();
+            'label' => $item->name,
+        ])->values();
     }
 }

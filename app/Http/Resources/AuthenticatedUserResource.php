@@ -15,7 +15,8 @@ class AuthenticatedUserResource extends JsonResource
             'username' => $this->username,
             'email' => $this->email,
             'gravatar' => $this->gravatar(100),
-            'initials' => $this->getInitials($this->name)
+            'initials' => $this->getInitials($this->name),
+            'is_admin' => $this->when($this->hasRole('admin'), true),
         ];
     }
 

@@ -9,8 +9,9 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { buttonVariants } from '@/components/ui/button.jsx';
 
-export function AlertAction({ trigger, action, title, description }) {
+export function AlertAction({ trigger, action, title, description, variant }) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
@@ -21,7 +22,7 @@ export function AlertAction({ trigger, action, title, description }) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={action}>Continue</AlertDialogAction>
+                    <AlertDialogAction className={buttonVariants({variant: variant})} onClick={action}>Continue</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
