@@ -16,7 +16,7 @@ class ArticleController extends Controller implements HasMiddleware
         return [
             new Middleware(
                 middleware: ['auth'],
-                except: ['index', 'show', 'search']
+                except: ['index', 'show', 'search', 'like']
             )
         ];
     }
@@ -73,22 +73,6 @@ class ArticleController extends Controller implements HasMiddleware
             ]);
     }
 
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Article $article)
     {
         $article->visit()->hourlyIntervals()->withIP()->withSession()->withUser();
@@ -103,7 +87,7 @@ class ArticleController extends Controller implements HasMiddleware
 
         return inertia('articles/show', [
             'article' => fn() => new Resources\ArticleSingleResource(
-                $article->load(['category:id,name,slug', 'user:id,name', 'tags:id,name,slug']),
+                $article->loadCount('likes')->load(['category:id,name,slug', 'user:id,name', 'tags:id,name,slug']),
             ),
             'articles' => fn() => $relatedArticles,
             'comments' => fn() => Resources\CommentResource::collection(
@@ -116,27 +100,20 @@ class ArticleController extends Controller implements HasMiddleware
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Article $article)
+    public function like(Request $request, Article $article)
     {
-        //
-    }
+        if ($request->user()) {
+            $like = $article->likes()->where('user_id', $request->user()->id)->first();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Article $article)
-    {
-        //
-    }
+            if ($like) {
+                $like->delete();
+            } else {
+                $article->likes()->create(['user_id' => $request->user()->id]);
+            }
+        } else {
+            // flash message
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Article $article)
-    {
-        //
+        return back();
     }
 }

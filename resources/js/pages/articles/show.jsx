@@ -12,6 +12,8 @@ import { useState } from 'react';
 import { CommentBlock } from './comments/comment-block';
 import { Button } from '@/components/ui/button';
 import { CommentForm } from './comments/comment-form';
+import { Share } from '@/pages/articles/partials/share.jsx';
+import { Like } from '@/pages/articles/partials/like.jsx';
 
 export default function Show(props) {
     const { article, comments, auth } = props;
@@ -46,12 +48,19 @@ export default function Show(props) {
 
                         <h1 className="text-2xl font-semibold md:text-4xl">{article.title}</h1>
 
-                        <div className="flex items-center text-sm text-muted-foreground">
-                            <time>{article.published_at}</time>
-                            <span className="mx-2">|</span>
-                            <Link href={`/categories/${article.category.slug}`}>
-                                <Badge className="outline">{article.category.name}</Badge>
-                            </Link>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center text-sm text-muted-foreground">
+                                <time>{article.published_at}</time>
+                                <span className="mx-2">|</span>
+                                <Link href={`/categories/${article.category.slug}`}>
+                                    <Badge className="outline">{article.category.name}</Badge>
+                                </Link>
+                            </div>
+
+                            <div className="flex gap-x-1">
+                                <Share article={article} />
+                                <Like article={article} />
+                            </div>
                         </div>
 
                         <p className="text-muted-foreground">{article.teaser}</p>
