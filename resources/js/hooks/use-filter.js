@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { debounce, pickBy } from 'lodash';
 import { router } from '@inertiajs/react';
 
-export function useFilter({ route, values, only, wait = 300 }) {
+export function useFilter({ route, values, only, wait = 500 }) {
     const reload = useCallback(
         debounce((query) => {
             router.get(route, pickBy(query), {

@@ -26,14 +26,14 @@ class InternalArticleController extends Controller implements HasMiddleware
 
     public function index(Request $request)
     {
+        $only = ['search', 'status', 'category'];
         $totalVisits = Visit::query()->where('visitable_type', Models\Article::class)->count();
         $articles = ArticleListResource::collection(
             $self = Models\Article::query()->select(['id', 'user_id', 'category_id', 'title', 'slug', 'published_at', 'created_at', 'status'])
                 ->with(['user:id,name', 'category:id,name,slug', 'tags:id,name,slug'])
-                ->when($request->search, fn ($query, $value) => $query->where('title', 'like' , "%{$value}%"))
-                ->when($request->status, fn ($query, $value) => $query->where('status', $value))
                 ->withTotalVisitCount()
                 ->when(!$request->user()->hasRole('admin'), fn($query) => $query->whereBelongsTo($request->user()))
+                ->filter($request->only([...$only, 'user']))
                 ->latest()
                 ->paginate(10)
                 ->withQueryString()
@@ -50,7 +50,18 @@ class InternalArticleController extends Controller implements HasMiddleware
 
         return inertia('articles/list', [
             'articles' => fn() => $articles,
-            'state' => $request->only('page', 'status', 'search'),
+            'filters' => [
+                'statuses' => fn() => ArticleStatus::toSelectArray(),
+                'categories' => fn() => Models\Category::query()->select(['slug', 'name'])->get()->map(fn($i) => [
+                    'value' => $i->slug,
+                    'label' => $i->name,
+                ]),
+                'users' => fn() => Models\User::query()->select(['id', 'name'])->whereHas('articles')->get()->map(fn($i) => [
+                    'value' => $i->id,
+                    'label' => $i->name,
+                ]),
+                'state' => $request->only([...$only, 'page']),
+            ]
         ]);
     }
 
@@ -92,11 +103,11 @@ class InternalArticleController extends Controller implements HasMiddleware
     public function edit(Models\Article $article)
     {
         return inertia('articles/form', [
-            'page_data' => fn () => [
-                'categories' => fn () => Models\Category::toSelectArray(),
-                'tags' => fn () => Models\Tag::toSelectArray(),
-                'article' => fn () => $article->load('tags', 'category:id,name'),
-                'statuses' => fn () => ArticleStatus::toSelectArray(),
+            'page_data' => fn() => [
+                'categories' => fn() => Models\Category::toSelectArray(),
+                'tags' => fn() => Models\Tag::toSelectArray(),
+                'article' => fn() => $article->load('tags', 'category:id,name'),
+                'statuses' => fn() => ArticleStatus::toSelectArray(),
             ],
             'page_meta' => [
                 'title' => 'Edit Article',

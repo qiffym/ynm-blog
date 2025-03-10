@@ -25,10 +25,11 @@ import {
 import { AlertAction } from '@/components/alert-action.jsx';
 import { useState } from 'react';
 import { useFilter } from '@/hooks/use-filter.js';
+import SearchInput from '@/components/search-input.jsx';
 
 export default function List({ auth, ...props }) {
     const { data: articles, meta, links } = props.articles;
-    const [params, setParams] = useState(props.state);
+    const [params, setParams] = useState(props.filters.state);
 
     useFilter({
         route: route('internal-articles.index'),
@@ -38,7 +39,7 @@ export default function List({ auth, ...props }) {
 
     return (
         <div>
-            <div className="mb-6 grid gap-6 sm:grid-cols-3">
+            <header className="mb-6 grid gap-6 sm:grid-cols-3">
                 <Card>
                     <CardHeader>
                         <CardTitle>{meta.total}</CardTitle>
@@ -57,7 +58,7 @@ export default function List({ auth, ...props }) {
                         <CardDescription>Unpublihsed Articles</CardDescription>
                     </CardHeader>
                 </Card>
-            </div>
+            </header>
             <Card>
                 <div className="flex flex-col justify-between gap-y-6 p-6 md:flex-row md:items-center md:gap-y-0">
                     <CardHeader className="p-0">
@@ -65,10 +66,9 @@ export default function List({ auth, ...props }) {
                         <CardDescription>{meta.total} articles found on this application.</CardDescription>
                     </CardHeader>
                     <div className="flex max-w-md flex-col gap-2 md:flex-row">
-                        <Input
+                        <SearchInput
                             value={params?.search}
                             onChange={(e) => setParams((prev) => ({ ...prev, search: e.target.value }))}
-                            placeholder="Search..."
                         />
                         <div className="grid grid-cols-2 gap-x-2 md:flex">
                             <Select value={params?.status} onValueChange={(e) => setParams({ ...params, status: e })}>

@@ -24,6 +24,24 @@ class Article extends Model implements CanVisit
         return $query->withCount('comments')->orderBy('comments_count', 'desc');
     }
 
+    public function scopeFilter($query, array $filters): void
+    {
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('title', 'REGEXP', $search);
+            });
+        })->when($filters['status'] ?? null, function ($query, $item) {
+            match ($item) {
+                'draft' => $query->where('status', ArticleStatus::Draft),
+                'published' => $query->where('status', ArticleStatus::Published),
+                'pending' => $query->where('status', ArticleStatus::Pending),
+                'archived' => $query->where('status', ArticleStatus::Archived),
+                default => $query,
+            };
+        })->when($filters['category'] ?? null, fn($query, $item) => $query->whereRelation('category', 'slug', $item))
+            ->when($filters['user'] ?? null, fn($query, $item) => $query->where('user_id', $item));
+    }
+
     protected function casts(): array
     {
         return [
