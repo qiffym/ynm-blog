@@ -10,6 +10,8 @@ import { MultiSelect } from '@/components/ui/multi-select';
 import { InputErrorMessage } from '@/components/input-error-message';
 import { Textarea } from '@/components/ui/textarea';
 import { FileUpload } from '@/components/file-upload';
+import { flashMessage } from '@/lib/utils.js';
+import { toast } from 'sonner';
 
 export default function Form({ auth, page_meta, page_data }) {
     const { data, setData, post, errors, processing } = useForm({
@@ -36,7 +38,14 @@ export default function Form({ auth, page_meta, page_data }) {
     function submit(e) {
         e.preventDefault();
         post(page_meta.url, {
-            preserveScroll: true
+            preserveScroll: true,
+            onSuccess: (params) => {
+                const flash = flashMessage(params);
+                if (flash) {
+                    toast[flash.type](flash.message);
+                }
+
+            }
         });
     }
 

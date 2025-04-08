@@ -15,3 +15,7 @@ export function kebabCase(string) {
         .replace(/\s+/g, '-')
         .replace(/[^\w-]+/g, '');
 }
+
+export function flashMessage(params) {
+    return params.props.flash_message;
+}

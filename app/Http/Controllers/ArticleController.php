@@ -111,7 +111,7 @@ class ArticleController extends Controller implements HasMiddleware
                 $article->likes()->create(['user_id' => $request->user()->id]);
             }
         } else {
-            // flash message
+            flashMessage('You need to login to like this article.', 'warning');
         }
 
         return back();
