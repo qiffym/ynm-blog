@@ -2,10 +2,13 @@ import { Aside } from '@/components/aside';
 import { Container } from '@/components/container';
 import { Navbar } from '@/components/navbar';
 import { Head } from '@inertiajs/react';
+import { Toaster } from '@/components/ui/sonner.jsx';
 
 export function UserLayout({ title, children }) {
     return (
         <div className="flex min-h-screen w-full flex-col">
+            <Toaster />
+
             <Head title={title} />
             <Navbar />
             <main className="min-h-[calc(100vh_-_theme(spacing.16))] bg-muted/40 py-6 lg:gap-8 lg:py-16">

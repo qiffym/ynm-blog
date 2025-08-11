@@ -19,6 +19,7 @@ class ArticleSingleResource extends JsonResource
             'teaser' => $this->teaser,
             'content' => Markdown::convert($this->content)->getContent(),
             'published_at' => $this->published_at ? $this->published_at->format('d F Y') : null,
+            'likes_count' => $this->likes_count,
             'category' => [
                 'id' => $this->category->id,
                 'name' => $this->category->name,

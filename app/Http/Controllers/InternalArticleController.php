@@ -97,6 +97,8 @@ class InternalArticleController extends Controller implements HasMiddleware
 
         $article->tags()->sync($request->tags);
 
+        flashMessage('Article created successfully');
+
         return redirect()->route('internal-articles.index');
     }
 
@@ -132,6 +134,8 @@ class InternalArticleController extends Controller implements HasMiddleware
 
         $article->tags()->sync($request->tags);
 
+        flashMessage('Article updated successfully');
+
         return redirect()->route('internal-articles.index');
     }
 
@@ -147,6 +151,8 @@ class InternalArticleController extends Controller implements HasMiddleware
             'status' => $article->status === ArticleStatus::Published ? ArticleStatus::Pending : ArticleStatus::Published,
             'published_at' => $article->status === ArticleStatus::Published ? null : now(),
         ]);
+
+        flashMessage('Article deleted successfully');
 
         return redirect()->route('internal-articles.index');
     }

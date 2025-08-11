@@ -26,6 +26,8 @@ import { AlertAction } from '@/components/alert-action.jsx';
 import { useState } from 'react';
 import { useFilter } from '@/hooks/use-filter.js';
 import SearchInput from '@/components/search-input.jsx';
+import { flashMessage } from '@/lib/utils.js';
+import { toast } from 'sonner';
 
 export default function List({ auth, ...props }) {
     const { data: articles, meta, links } = props.articles;
@@ -170,7 +172,15 @@ export default function List({ auth, ...props }) {
                                                                 action={() =>
                                                                     router.delete(
                                                                         route('internal-articles.destroy', [article]),
-                                                                        { preserveScroll: true },
+                                                                        {
+                                                                            preserveScroll: true,
+                                                                            onSuccess: (params) => {
+                                                                                const flash = flashMessage(params);
+                                                                                if (flash) {
+                                                                                    toast[flash.type](flash.message);
+                                                                                }
+                                                                            },
+                                                                        },
                                                                     )
                                                                 }
                                                             />

@@ -37,16 +37,20 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user() ? new AuthenticatedUserResource($request->user()) : null,
             ],
-            'categories_g' => fn() => Category::query()
+            'categories_g' => cache()->remember('categories', 3600, fn() => Category::query()
                 ->select(['id', 'name', 'slug'])
                 ->orderBy('name')
                 ->whereHas('articles')
                 ->take(10)
-                ->get(),
+                ->get()),
             'ziggy' => fn() => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+            'flash_message' => fn() => [
+                'type' => $request->session()->get('type'),
+                'message' => $request->session()->get('message'),
+            ]
         ];
     }
 }

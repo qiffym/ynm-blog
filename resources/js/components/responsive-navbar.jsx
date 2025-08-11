@@ -19,6 +19,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { IconHamburger, IconSearch, IconSettings } from '@irsyadadl/paranoid';
 import { Label } from '@/components/ui/label';
+import { FilterResponsive } from '@/components/filter.jsx';
 
 export function ResponsiveNavbar(props) {
     const { auth, categories_g } = usePage().props;
@@ -63,6 +64,7 @@ export function ResponsiveNavbar(props) {
                                     <DropdownMenuItem asChild>
                                         <Link href="/articles">Articles</Link>
                                     </DropdownMenuItem>
+                                    <FilterResponsive />
                                     <DropdownMenuSub>
                                         <DropdownMenuSubTrigger>Categories</DropdownMenuSubTrigger>
                                         <DropdownMenuSubContent sideOffset={-32}>
