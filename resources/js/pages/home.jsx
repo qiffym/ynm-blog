@@ -3,13 +3,15 @@ import { Container } from '@/components/container';
 import { Head, Link } from '@inertiajs/react';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArticleCard } from './articles/partials/article-card';
+import { MetaTags } from '@/components/meta-tags.jsx';
 
 export default function Home(props) {
     const { articles, popular_articles } = props;
 
     return (
         <div>
-            <Head title="Home" />
+            <Head title="Read it when you relax" />
+            <MetaTags title="Read it when you relax" description="Read it when you relax" url={route('home')} />
             <Hero />
             <Container>
                 <div className="space-y-16 sm:space-y-24">

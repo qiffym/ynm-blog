@@ -3,12 +3,14 @@ import { Container } from '@/components/container';
 import { Head } from '@inertiajs/react';
 import { ArticleCard } from '@/pages/articles/partials/article-card';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination';
+import { MetaTags } from '@/components/meta-tags.jsx';
 
 export default function Index({ page_meta, ...props }) {
     const { data: articles, meta } = props.articles;
     return (
         <>
             <Head title={page_meta.title} />
+            <MetaTags title={page_meta.title} description={page_meta.description} url={route('articles.index')} />
             <div className="-mt-6 mb-6 border-b bg-background py-6 sm:-mt-16 md:mb-16 md:py-16">
                 <Container>
                     <h1 className="text-2xl font-semibold leading-none tracking-tight md:text-3xl">

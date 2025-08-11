@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { InputErrorMessage } from '@/components/input-error-message';
 import { AuthenticatedCard } from '@/components/authenticated-card';
+import { MetaTags } from '@/components/meta-tags.jsx';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -33,6 +34,7 @@ export default function Login({ status, canResetPassword }) {
     return (
         <>
             <Head title="Log in" />
+            <MetaTags title="Log in" description="Log in to YNM Blogs" url={route('login')} />
             {status && <div className="mb-4 text-sm font-medium text-green-600">{status}</div>}
             <AuthenticatedCard title="Log in to your account" description="Or create a new account">
                 <form onSubmit={submit} className="space-y-6">

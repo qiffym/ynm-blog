@@ -21,6 +21,7 @@ import {
 import { Link, router } from '@inertiajs/react';
 import { AlertAction } from '@/components/alert-action';
 import { Button } from '@/components/ui/button';
+import { MetaTags } from '@/components/meta-tags.jsx';
 
 export default function Index(props) {
     const { data: categories, meta, links } = props.categories;
